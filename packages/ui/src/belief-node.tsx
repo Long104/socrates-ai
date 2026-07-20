@@ -2,12 +2,14 @@
 
 import type { BeliefNodeData } from "@workspace/core";
 import { Handle, type Node, type NodeProps, Position } from "@xyflow/react";
+import { motion, useReducedMotion } from "motion/react";
 import { memo } from "react";
 
 type BeliefNodeType = Node<BeliefNodeData>;
 
 function BeliefNode({ data }: NodeProps<BeliefNodeType>) {
   const { label, type, fact, leap, status } = data;
+  const reduce = useReducedMotion();
 
   if (type === "root") {
     return (
@@ -47,11 +49,25 @@ function BeliefNode({ data }: NodeProps<BeliefNodeType>) {
     const borderColor = isResolved ? "var(--middle-way-glow)" : "var(--border)";
     const borderWidth = isResolved ? "2px" : "2px";
     const shadow = isResolved ? "0 0 40px -8px var(--middle-way-glow)" : "none";
-    const opacity = status === "locked" ? "opacity-50" : "opacity-100";
+    const mwTransition = reduce
+      ? { duration: 0 }
+      : { duration: 0.8, ease: [0.16, 1, 0.3, 1] as const };
 
     return (
-      <div
-        className={`w-[340px] rounded-md ${opacity}`}
+      <motion.div
+        key={status}
+        initial={
+          status === "resolved"
+            ? { opacity: 0, scale: 0.96, filter: "blur(8px)" }
+            : { opacity: 0.5, scale: 1, filter: "blur(0px)" }
+        }
+        animate={
+          status === "resolved"
+            ? { opacity: 1, scale: 1, filter: "blur(0px)" }
+            : { opacity: 0.5, scale: 1, filter: "blur(0px)" }
+        }
+        transition={mwTransition}
+        className="w-[340px] rounded-md"
         style={{
           borderRadius: "6px",
           backgroundColor: "var(--card)",
@@ -98,7 +114,7 @@ function BeliefNode({ data }: NodeProps<BeliefNodeType>) {
             </p>
           )}
         </div>
-      </div>
+      </motion.div>
     );
   }
 
@@ -123,14 +139,22 @@ function BeliefNode({ data }: NodeProps<BeliefNodeType>) {
     return null;
   }
 
+  const nodeTransition = reduce
+    ? { duration: 0 }
+    : { duration: 0.45, ease: [0.16, 1, 0.3, 1] as const };
+
   return (
-    <div
-      className="w-[240px] bg-[var(--card)] rounded-md"
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={nodeTransition}
+      className="w-[240px] bg-[var(--card)] rounded-md transition-all duration-500"
       style={{
         borderRadius: "6px",
-        border: isResolved
-          ? "1px solid color-mix(in oklch, var(--leap-resolved) 40%, transparent)"
-          : "1px solid color-mix(in oklch, var(--accent) 40%, transparent)",
+        border: "1px solid transparent",
+        borderColor: isResolved
+          ? "color-mix(in oklch, var(--leap-resolved) 40%, transparent)"
+          : "color-mix(in oklch, var(--accent) 40%, transparent)",
       }}
     >
       <Handle type="target" position={Position.Top} />
@@ -142,7 +166,7 @@ function BeliefNode({ data }: NodeProps<BeliefNodeType>) {
           {label}
         </span>
         <span
-          className="text-[9px] uppercase tracking-[0.12em]"
+          className="text-[9px] uppercase tracking-[0.12em] transition-all duration-500"
           style={{ fontFamily: "var(--font-geist-mono)", color: statusColor }}
         >
           {statusLabel}
@@ -170,13 +194,13 @@ function BeliefNode({ data }: NodeProps<BeliefNodeType>) {
       {/* Leap section */}
       <div className="p-2.5">
         <span
-          className="text-[8px] uppercase tracking-[0.12em] block mb-0.5"
+          className="text-[8px] uppercase tracking-[0.12em] block mb-0.5 transition-all duration-500"
           style={{ fontFamily: "var(--font-geist-mono)", color: statusColor }}
         >
           Leap
         </span>
         <p
-          className="text-[11px] leading-snug"
+          className="text-[11px] leading-snug transition-all duration-500"
           style={{
             fontFamily: isResolved ? "var(--font-newsreader)" : "var(--font-geist)",
             fontStyle: isResolved ? "italic" : "normal",
@@ -187,7 +211,7 @@ function BeliefNode({ data }: NodeProps<BeliefNodeType>) {
         </p>
       </div>
       <Handle type="source" position={Position.Bottom} />
-    </div>
+    </motion.div>
   );
 }
 

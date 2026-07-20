@@ -27,10 +27,10 @@ export default function ChatPanel({
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const [inputValue, setInputValue] = useState("");
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: messages is intentional trigger
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
-
   useEffect(() => {
     if (!disabled && !isComplete) {
       inputRef.current?.focus();
@@ -84,6 +84,7 @@ export default function ChatPanel({
         </div>
         {onAutoFill && !isComplete && (
           <button
+            type="button"
             onClick={onAutoFill}
             className="text-[10px] bg-[var(--muted)] border border-[var(--border)] px-2 py-1 rounded font-mono"
             style={{ color: "var(--muted-foreground)" }}
@@ -109,7 +110,7 @@ export default function ChatPanel({
             const isUser = msg.role === "user";
             if (isUser) {
               return (
-                <div key={i} className="max-w-[85%]">
+                <div key={`${msg.role}-${i}`} className="max-w-[85%]">
                   <span
                     className="text-[9px] uppercase tracking-[0.12em] block mb-1"
                     style={{
@@ -135,7 +136,11 @@ export default function ChatPanel({
               );
             }
             return (
-              <div key={i} className="pl-4 my-3" style={{ borderLeft: "2px solid var(--border)" }}>
+              <div
+                key={`${msg.role}-${i}`}
+                className="pl-4 my-3"
+                style={{ borderLeft: "2px solid var(--border)" }}
+              >
                 <div
                   className="text-[17px] leading-[1.55] tracking-[-0.005em]"
                   style={{
@@ -145,6 +150,7 @@ export default function ChatPanel({
                     maxWidth: "60ch",
                     textWrap: "pretty",
                   }}
+                  // biome-ignore lint/security/noDangerouslySetInnerHtml: trusted AI output from own API
                   dangerouslySetInnerHTML={{ __html: msg.text }}
                 />
               </div>
@@ -213,6 +219,7 @@ export default function ChatPanel({
               strokeLinecap="round"
               strokeLinejoin="round"
             >
+              <title>Send</title>
               <path d="M5 12h14" />
               <path d="m12 5 7 7-7 7" />
             </svg>

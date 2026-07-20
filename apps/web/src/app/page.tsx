@@ -21,7 +21,7 @@ export default function Home() {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       role: "ai",
-      text: "Welcome to <strong>Socrates AI</strong>. Type a rigid belief or worldview you hold — something that feels absolute — and I'll help you deconstruct it using the Socratic Method.",
+      text: "Welcome to <strong>Socrates AI</strong>. Type a rigid belief or worldview you hold, something that feels absolute, and I'll help you deconstruct it using the Socratic Method.",
     },
   ]);
   const [mindState, setMindState] = useState<"untangling" | "untangled">("untangling");
@@ -193,6 +193,7 @@ export default function Home() {
     }
   }, []);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: resolvedTextsRef is a ref, stable
   const handleReflect = useCallback(
     async (userResponse: string) => {
       if (!deconstructData) return;

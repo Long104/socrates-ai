@@ -22,7 +22,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Socrates AI — The Middle Way",
+  title: "Socrates AI: The Middle Way",
   description:
     "A visual thinking tool that deconstructs rigid worldviews using the Socratic Method.",
 };
