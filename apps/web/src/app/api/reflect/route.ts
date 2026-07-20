@@ -1,4 +1,4 @@
-import { MODEL, REFLECT_SYSTEM_PROMPT, openai, provider } from "@workspace/core";
+import { MODEL, REFLECT_SYSTEM_PROMPT, openai, provider, safeParseJson } from "@workspace/core";
 import type { ReflectRequest, ReflectResponse } from "@workspace/core";
 import { NextResponse } from "next/server";
 
@@ -58,7 +58,7 @@ export async function POST(request: Request) {
       throw new Error("Empty response from model");
     }
 
-    const parsed: ReflectResponse = JSON.parse(content);
+    const parsed = safeParseJson<ReflectResponse>(content);
 
     // Validate
     if (typeof parsed.factValidated !== "boolean") {

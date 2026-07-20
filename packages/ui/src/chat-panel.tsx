@@ -82,17 +82,17 @@ export default function ChatPanel({
             </p>
           )}
         </div>
-        {onAutoFill && !isComplete && (
-          <button
-            type="button"
-            onClick={onAutoFill}
-            className="text-[10px] bg-[var(--muted)] border border-[var(--border)] px-2 py-1 rounded font-mono"
-            style={{ color: "var(--muted-foreground)" }}
-            title="Simulate a realistic resistant conversation"
-          >
-            Auto-Fill Demo
-          </button>
-        )}
+        {/* {onAutoFill && !isComplete && ( */}
+        {/*   <button */}
+        {/*     type="button" */}
+        {/*     onClick={onAutoFill} */}
+        {/*     className="text-[10px] bg-[var(--muted)] border border-[var(--border)] px-2 py-1 rounded font-mono" */}
+        {/*     style={{ color: "var(--muted-foreground)" }} */}
+        {/*     title="Simulate a realistic resistant conversation" */}
+        {/*   > */}
+        {/*     Auto-Fill Demo */}
+        {/*   </button> */}
+        {/* )} */}
       </div>
 
       {/* Chat Messages */}

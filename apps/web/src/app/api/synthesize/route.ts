@@ -1,4 +1,4 @@
-import { MODEL, SYNTHESIZE_SYSTEM_PROMPT, openai, provider } from "@workspace/core";
+import { MODEL, SYNTHESIZE_SYSTEM_PROMPT, openai, provider, safeParseJson } from "@workspace/core";
 import type { SynthesizeRequest, SynthesizeResponse } from "@workspace/core";
 import { NextResponse } from "next/server";
 
@@ -57,7 +57,7 @@ export async function POST(request: Request) {
       throw new Error("Empty response from model");
     }
 
-    const parsed: SynthesizeResponse = JSON.parse(content);
+    const parsed = safeParseJson<SynthesizeResponse>(content);
 
     if (!parsed.middleWay || typeof parsed.middleWay !== "string") {
       throw new Error("Invalid response: middleWay must be a string");

@@ -1,4 +1,4 @@
-import { DECONSTRUCT_SYSTEM_PROMPT, MODEL, openai, provider } from "@workspace/core";
+import { DECONSTRUCT_SYSTEM_PROMPT, MODEL, openai, provider, safeParseJson } from "@workspace/core";
 import type { DeconstructRequest, DeconstructResponse } from "@workspace/core";
 import { NextResponse } from "next/server";
 
@@ -63,7 +63,7 @@ export async function POST(request: Request) {
       throw new Error("Empty response from model");
     }
 
-    const parsed: DeconstructResponse = JSON.parse(content);
+    const parsed = safeParseJson<DeconstructResponse>(content);
 
     // Validate structure
     if (!parsed.rootNode || !Array.isArray(parsed.assumptions)) {
