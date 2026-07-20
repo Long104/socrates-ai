@@ -36,6 +36,9 @@ export default function Home() {
     });
   }, []);
 
+  // Store resolved texts globally for the leap text update (must be before useMemo)
+  const resolvedTextsRef = useRef(new Map<string, string>());
+
   // Build React Flow nodes and edges from deconstructData + resolved state
   const { nodes, edges } = useMemo<{ nodes: Node<BeliefNodeData>[]; edges: Edge[] }>(() => {
     if (!deconstructData) return { nodes: [], edges: [] };
@@ -142,9 +145,6 @@ export default function Home() {
 
     return { nodes: result, edges: edgeList };
   }, [deconstructData, resolvedIds, currentAssumptionIndex]);
-
-  // Store resolved texts globally for the leap text update
-  const resolvedTextsRef = useRef(new Map<string, string>());
 
   const handleDeconstruct = useCallback(
     async (beliefText: string) => {
