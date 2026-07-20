@@ -1,7 +1,7 @@
-import { AbsoluteFill, interpolate, useCurrentFrame } from "remotion";
 import { Backdrop } from "@/components/remocn/backdrop";
 import { ShaderMeshGradient } from "@/components/remocn/shader-mesh-gradient";
 import { SoftBlurIn } from "@/components/remocn/soft-blur-in";
+import { AbsoluteFill, interpolate, useCurrentFrame } from "remotion";
 
 const SAMPLE = '"Capitalism is pure evil."';
 

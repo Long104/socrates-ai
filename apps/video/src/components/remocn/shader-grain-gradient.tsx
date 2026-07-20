@@ -1,21 +1,12 @@
 "use client";
 
-import {
-  GrainGradient,
-  type GrainGradientProps,
-} from "@paper-design/shaders-react";
+import { GrainGradient, type GrainGradientProps } from "@paper-design/shaders-react";
 import { useCallback, useState } from "react";
-import {
-  continueRender,
-  delayRender,
-  useCurrentFrame,
-  useVideoConfig,
-} from "remotion";
+import { continueRender, delayRender, useCurrentFrame, useVideoConfig } from "remotion";
 
 const NEUTRAL_COLORS = ["#3a3a52", "#4a4a68", "#5a5a7e"];
 
-export interface ShaderGrainGradientProps
-  extends Omit<GrainGradientProps, "frame" | "ref"> {}
+export interface ShaderGrainGradientProps extends Omit<GrainGradientProps, "frame" | "ref"> {}
 
 export function ShaderGrainGradient({
   speed = 1,
@@ -34,19 +25,13 @@ export function ShaderGrainGradient({
   const gate = useCallback(
     (element: HTMLDivElement | null) => {
       if (!element) return;
-      requestAnimationFrame(() =>
-        requestAnimationFrame(() => continueRender(handle)),
-      );
+      requestAnimationFrame(() => requestAnimationFrame(() => continueRender(handle)));
     },
-    [handle],
+    [handle]
   );
 
   return (
-    <div
-      ref={gate}
-      className={className}
-      style={{ position: "absolute", inset: 0 }}
-    >
+    <div ref={gate} className={className} style={{ position: "absolute", inset: 0 }}>
       <GrainGradient
         speed={0}
         frame={(frame / fps) * speed * 1000}

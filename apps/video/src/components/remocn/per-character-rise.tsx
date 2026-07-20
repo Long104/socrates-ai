@@ -45,8 +45,7 @@ export function PerCharacterRise({
           fontWeight,
           color,
           letterSpacing: "-0.05em",
-          fontFamily:
-            "var(--font-geist-sans), -apple-system, BlinkMacSystemFont, sans-serif",
+          fontFamily: "var(--font-geist-sans), -apple-system, BlinkMacSystemFont, sans-serif",
         }}
       >
         {chars.map((char, i) => {

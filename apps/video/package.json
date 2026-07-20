@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "remotion studio",
-    "build": "remotion render",
-    "still": "remotion still"
+    "dev": "remotion studio ./src/index.ts",
+    "render": "PUPPETEER_CHROMIUM_REVISION=0 REMOTION_BROWSER_EXECUTABLE=\"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome\" remotion render ./src/index.ts DemoVideo out/socrates-ai-demo.mp4 --gl=angle --concurrency=4",
+    "still": "remotion still ./src/index.ts"
   },
   "dependencies": {
     "@paper-design/shaders-react": "^0.0.77",

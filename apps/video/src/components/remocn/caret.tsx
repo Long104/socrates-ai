@@ -19,7 +19,7 @@ export interface CaretProps {
 
 export function caretBlinkOpacity(
   frame: number,
-  opts: { fps: number; blinkPerSecond: number; speed: number },
+  opts: { fps: number; blinkPerSecond: number; speed: number }
 ): number {
   const cycles = opts.blinkPerSecond <= 0 ? 1 : opts.blinkPerSecond;
   const halfPeriod = opts.fps / cycles / 2;

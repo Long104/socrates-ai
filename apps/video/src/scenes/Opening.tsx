@@ -26,17 +26,26 @@ export function Opening() {
           fontWeight={800}
           color="#f0ece4"
         />
-        <div style={{ height: 28 }} />
         <div
           style={{
-            fontSize: 22,
-            color: "#8a8578",
-            fontFamily: "Georgia, serif",
-            fontStyle: "italic",
-            letterSpacing: "0.02em",
+            position: "absolute",
+            top: "calc(50% + 70px)",
+            left: 0,
+            right: 0,
+            textAlign: "center",
           }}
         >
-          The Middle Way
+          <span
+            style={{
+              fontSize: 22,
+              color: "#8a8578",
+              fontFamily: "Georgia, serif",
+              fontStyle: "italic",
+              letterSpacing: "0.02em",
+            }}
+          >
+            The Middle Way
+          </span>
         </div>
       </AbsoluteFill>
     </AbsoluteFill>

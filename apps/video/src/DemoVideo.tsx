@@ -1,9 +1,9 @@
 import { AbsoluteFill, Sequence } from "remotion";
-import { Opening } from "./scenes/Opening";
-import { BeliefInput } from "./scenes/BeliefInput";
 import { AppDemo } from "./scenes/AppDemo";
-import { MiddleWay } from "./scenes/MiddleWay";
+import { BeliefInput } from "./scenes/BeliefInput";
 import { Closing } from "./scenes/Closing";
+import { MiddleWay } from "./scenes/MiddleWay";
+import { Opening } from "./scenes/Opening";
 
 export function DemoVideo() {
   return (

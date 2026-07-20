@@ -46,8 +46,7 @@ export function Typewriter({
           fontWeight,
           color,
           letterSpacing: "-0.03em",
-          fontFamily:
-            "var(--font-geist-sans), -apple-system, BlinkMacSystemFont, sans-serif",
+          fontFamily: "var(--font-geist-sans), -apple-system, BlinkMacSystemFont, sans-serif",
           whiteSpace: "pre",
         }}
       >

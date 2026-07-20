@@ -1,15 +1,15 @@
 "use client";
 
+import {
+  ShaderGrainGradient,
+  type ShaderGrainGradientProps,
+} from "@/components/remocn/shader-grain-gradient";
 import type {
   TransitionPresentation,
   TransitionPresentationComponentProps,
 } from "@remotion/transitions";
 import type React from "react";
 import { AbsoluteFill, Easing, interpolate } from "remotion";
-import {
-  ShaderGrainGradient,
-  type ShaderGrainGradientProps,
-} from "@/components/remocn/shader-grain-gradient";
 
 const clampOpts = {
   extrapolateLeft: "clamp" as const,
@@ -29,12 +29,7 @@ export type GrainDissolveProps = {
 
 const GrainDissolvePresentation: React.FC<
   TransitionPresentationComponentProps<GrainDissolveProps>
-> = ({
-  children,
-  presentationProgress,
-  presentationDirection,
-  passedProps,
-}) => {
+> = ({ children, presentationProgress, presentationDirection, passedProps }) => {
   const {
     colors = DEFAULT_COLORS,
     colorBack = "#141318",
@@ -97,7 +92,7 @@ const GrainDissolvePresentation: React.FC<
 };
 
 export function grainDissolve(
-  props: GrainDissolveProps = {},
+  props: GrainDissolveProps = {}
 ): TransitionPresentation<GrainDissolveProps> {
   return {
     component: GrainDissolvePresentation,

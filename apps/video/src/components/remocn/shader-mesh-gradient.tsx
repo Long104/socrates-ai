@@ -1,21 +1,12 @@
 "use client";
 
-import {
-  MeshGradient,
-  type MeshGradientProps,
-} from "@paper-design/shaders-react";
+import { MeshGradient, type MeshGradientProps } from "@paper-design/shaders-react";
 import { useCallback, useState } from "react";
-import {
-  continueRender,
-  delayRender,
-  useCurrentFrame,
-  useVideoConfig,
-} from "remotion";
+import { continueRender, delayRender, useCurrentFrame, useVideoConfig } from "remotion";
 
 const NEUTRAL_COLORS = ["#12121a", "#232338", "#3a3a5c", "#52527a"];
 
-export interface ShaderMeshGradientProps
-  extends Omit<MeshGradientProps, "frame" | "ref"> {}
+export interface ShaderMeshGradientProps extends Omit<MeshGradientProps, "frame" | "ref"> {}
 
 export function ShaderMeshGradient({
   speed = 1,
@@ -32,19 +23,13 @@ export function ShaderMeshGradient({
   const gate = useCallback(
     (element: HTMLDivElement | null) => {
       if (!element) return;
-      requestAnimationFrame(() =>
-        requestAnimationFrame(() => continueRender(handle)),
-      );
+      requestAnimationFrame(() => requestAnimationFrame(() => continueRender(handle)));
     },
-    [handle],
+    [handle]
   );
 
   return (
-    <div
-      ref={gate}
-      className={className}
-      style={{ position: "absolute", inset: 0 }}
-    >
+    <div ref={gate} className={className} style={{ position: "absolute", inset: 0 }}>
       <MeshGradient
         speed={0}
         frame={(frame / fps) * speed * 1000}

@@ -1,6 +1,6 @@
 "use client";
 
-import { isValidElement, type ReactNode } from "react";
+import { type ReactNode, isValidElement } from "react";
 import { AbsoluteFill, Img, useVideoConfig } from "remotion";
 
 export type BackdropFill =
