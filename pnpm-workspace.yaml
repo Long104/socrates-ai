@@ -1,3 +1,9 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+
 allowBuilds:
+  '@biomejs/biome': false
+  lefthook: false
   sharp: true
   unrs-resolver: true

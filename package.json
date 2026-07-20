@@ -2,27 +2,18 @@
   "name": "socrates-ai",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@11.5.3",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint"
-  },
-  "dependencies": {
-    "@xyflow/react": "^12.11.2",
-    "next": "16.2.10",
-    "openai": "^6.48.0",
-    "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "start": "turbo start",
+    "check": "biome check --write --unsafe .",
+    "lint": "biome check ."
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "16.2.10",
-    "tailwindcss": "^4",
+    "@biomejs/biome": "^1.9.4",
+    "lefthook": "^1.11.0",
+    "turbo": "^2.5.0",
     "typescript": "^5"
   }
 }
