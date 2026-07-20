@@ -372,8 +372,8 @@ export default function Home() {
               className="text-[14px] max-w-prose mb-6"
               style={{ color: "var(--muted-foreground)", fontFamily: "var(--font-geist)" }}
             >
-              Share a thought you feel sure about — something black and white.
-              We'll explore it step by step.
+              Share a thought you feel sure about — something black and white. We'll explore it step
+              by step.
             </p>
             <form
               onSubmit={(e) => {
