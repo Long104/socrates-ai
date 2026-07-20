@@ -10,6 +10,7 @@ import type {
   ChatMessage,
   DeconstructResponse,
   ReflectResponse,
+  SynthesizeResponse,
 } from "@/lib/types";
 
 type Phase = "input" | "loading" | "reflecting" | "reflecting-loading" | "complete";
@@ -27,6 +28,7 @@ export default function Home() {
   ]);
   const [mindState, setMindState] = useState<"untangling" | "untangled">("untangling");
   const [resolvedIds, setResolvedIds] = useState<Set<string>>(new Set());
+  const [middleWayText, setMiddleWayText] = useState<string>("");
 
   const resolveAssumption = useCallback((id: string) => {
     setResolvedIds((prev) => {
@@ -53,7 +55,7 @@ export default function Home() {
     result.push({
       id: deconstructData.rootNode.id,
       type: "beliefNode",
-      position: { x: 200, y: 20 },
+      position: { x: 0, y: 0 },
       data: {
         label: deconstructData.rootNode.text,
         type: "root",
@@ -61,15 +63,11 @@ export default function Home() {
       },
     });
 
-    // Assumption nodes
-    const totalAssumptions = deconstructData.assumptions.length;
-    const startX =
-      totalAssumptions === 2
-        ? 100
-        : totalAssumptions === 3
-          ? 30
-          : 0;
-    const spacing = totalAssumptions === 2 ? 280 : 200;
+    // Assumption positions (exactly 2, side by side)
+    const assumptionPositions = [
+      { x: -180, y: 250 },
+      { x: 180, y: 250 },
+    ];
 
     let middleWayUnlocked = true;
 
@@ -87,10 +85,13 @@ export default function Home() {
         middleWayUnlocked = false;
       }
 
+      // Progressive reveal: skip locked (future) nodes entirely
+      if (status === "locked") return;
+
       result.push({
         id: assumption.id,
         type: "beliefNode",
-        position: { x: startX + i * spacing, y: 200 },
+        position: assumptionPositions[i] ?? { x: 0, y: 250 },
         data: {
           label: `SUPPORTING VIEW ${String.fromCharCode(65 + i)}`,
           type: "assumption",
@@ -133,18 +134,16 @@ export default function Home() {
     result.push({
       id: "middle-way",
       type: "beliefNode",
-      position: { x: 200, y: 400 },
+      position: { x: 0, y: 500 },
       data: {
-        label: middleWayUnlocked
-          ? "Power is a tool. Systems are flawed, but I focus on the scale of action I actually control."
-          : "",
+        label: middleWayUnlocked ? middleWayText : "",
         type: "middle-way",
         status: middleWayUnlocked ? "resolved" : "locked",
       },
     });
 
     return { nodes: result, edges: edgeList };
-  }, [deconstructData, resolvedIds, currentAssumptionIndex]);
+  }, [deconstructData, resolvedIds, currentAssumptionIndex, middleWayText]);
 
   const handleDeconstruct = useCallback(
     async (beliefText: string) => {
@@ -249,15 +248,29 @@ export default function Home() {
             ]);
             setPhase("reflecting");
           } else {
-            // All assumptions resolved - unlock middle way
+            // All assumptions resolved — fetch Middle Way synthesis
             setCurrentAssumptionIndex(nextIndex);
-            resolveAssumption(current.id); // ensure last one is resolved
+            resolveAssumption(current.id);
+            const resolvedAssumptions = deconstructData.assumptions.map((a) => {
+              const resolvedText = resolvedTextsRef.current.get(a.id) ?? "";
+              return { fact: a.fact, originalLeap: a.leap, resolvedText };
+            });
+            const synRes = await fetch("/api/synthesize", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                rootBelief: deconstructData.rootNode.text,
+                resolvedAssumptions,
+              }),
+            });
+            const synData: SynthesizeResponse = await synRes.json();
+            setMiddleWayText(synData.middleWay);
             setMindState("untangled");
             setMessages((prev) => [
               ...prev,
               {
                 role: "ai",
-                text: "All assumptions have been examined. Look at the bottom of the graph — <strong>The Middle Way</strong> has unlocked.<br/><br/>Take a moment to reflect on how this balanced perspective feels compared to the heavy view you carried.",
+                text: `All assumptions examined. <strong>The Middle Way</strong> has emerged at the bottom of the graph.<br/><br/><em>${synData.middleWay}</em><br/><br/>Sit with this. How does it feel compared to the heavy view you carried?`,
               },
             ]);
             setPhase("complete");
@@ -266,16 +279,30 @@ export default function Home() {
           // Stay on same node, deeper question
           setPhase("reflecting");
         } else if (data.nextAction === "complete") {
-          // Direct unlock
+          // Direct unlock — fetch Middle Way synthesis
           resolveAssumption(current.id);
           resolvedTextsRef.current.set(current.id, data.resolvedText);
           setCurrentAssumptionIndex(deconstructData.assumptions.length);
+          const resolvedAssumptions = deconstructData.assumptions.map((a) => {
+            const resolvedText = resolvedTextsRef.current.get(a.id) ?? "";
+            return { fact: a.fact, originalLeap: a.leap, resolvedText };
+          });
+          const synRes = await fetch("/api/synthesize", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              rootBelief: deconstructData.rootNode.text,
+              resolvedAssumptions,
+            }),
+          });
+          const synData: SynthesizeResponse = await synRes.json();
+          setMiddleWayText(synData.middleWay);
           setMindState("untangled");
           setMessages((prev) => [
             ...prev,
             {
               role: "ai",
-              text: "All assumptions have been examined. Look at the bottom of the graph — <strong>The Middle Way</strong> has unlocked.<br/><br/>Take a moment to reflect on how this balanced perspective feels compared to the heavy view you carried.",
+              text: `All assumptions examined. <strong>The Middle Way</strong> has emerged at the bottom of the graph.<br/><br/><em>${synData.middleWay}</em><br/><br/>Sit with this. How does it feel compared to the heavy view you carried?`,
             },
           ]);
           setPhase("complete");

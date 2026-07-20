@@ -18,13 +18,13 @@ You MUST return a JSON object with EXACTLY this structure:
       "leap": "<the absolute cognitive distortion — uses words like all/always/never/pure/completely>",
       "socraticQuestion": "<a Socratic question that helps the user find their own exception to the leap>"
     },
-    ... (2-3 assumptions total)
+    ... (exactly 2 assumptions total)
   ],
   "middleWay": null
 }
 
 Rules:
-- Generate exactly 2 or 3 assumptions (not more, not less)
+- Generate exactly 2 assumptions (not more, not less)
 - Each assumption must have a FACT (true observation) and a LEAP (absolute distortion)
 - Never tell the user they are wrong — frame the question so THEY find the exception
 - Return ONLY valid JSON, no markdown, no explanation
