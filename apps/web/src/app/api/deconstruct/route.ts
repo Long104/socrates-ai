@@ -1,4 +1,9 @@
-import { DECONSTRUCT_SYSTEM_PROMPT, MODEL, getOpenAI, provider, safeParseJson } from "@workspace/core";
+import {
+  DECONSTRUCT_SYSTEM_PROMPT,
+  MODEL,
+  getOpenAI,
+  safeParseJson,
+} from "@workspace/core";
 import type { DeconstructRequest, DeconstructResponse } from "@workspace/core";
 import { NextResponse } from "next/server";
 
@@ -49,13 +54,7 @@ export async function POST(request: Request) {
           content: `Deconstruct this belief: "${body.belief}"\n\n${JSON_INSTRUCTIONS}`,
         },
       ],
-      ...(provider === "deepseek"
-        ? { response_format: { type: "json_object" } as const }
-        : {
-            response_format: {
-              type: "json_object",
-            } as const,
-          }),
+      response_format: { type: "json_object" },
     });
 
     const content = completion.choices[0]?.message?.content;

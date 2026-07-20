@@ -1,4 +1,9 @@
-import { MODEL, SYNTHESIZE_SYSTEM_PROMPT, getOpenAI, provider, safeParseJson } from "@workspace/core";
+import {
+  MODEL,
+  SYNTHESIZE_SYSTEM_PROMPT,
+  getOpenAI,
+  safeParseJson,
+} from "@workspace/core";
 import type { SynthesizeRequest, SynthesizeResponse } from "@workspace/core";
 import { NextResponse } from "next/server";
 
@@ -43,13 +48,7 @@ export async function POST(request: Request) {
           content: `Synthesize the Middle Way from these resolved assumptions:\n\n${resolvedList}\n\n${JSON_INSTRUCTIONS}`,
         },
       ],
-      ...(provider === "deepseek"
-        ? { response_format: { type: "json_object" } as const }
-        : {
-            response_format: {
-              type: "json_object",
-            } as const,
-          }),
+      response_format: { type: "json_object" },
     });
 
     const content = completion.choices[0]?.message?.content;

@@ -1,5 +1,7 @@
 # Socrates AI — The Middle Way
 
+[![GitHub](https://img.shields.io/badge/github-Long104/socrates--ai-181717?logo=github)](https://github.com/Long104/socrates-ai)
+
 A visual thinking tool that deconstructs rigid, anxiety-inducing worldviews using the Socratic Method (CBT + Buddhist philosophy + first-principles thinking).
 
 **OpenAI Build Week 2026** — Track: Apps for Your Life
@@ -66,15 +68,29 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ---
 
-## Codex Collaboration
+## Codex + GPT-5.6 Collaboration
 
-This project was built using Codex (opencode CLI) with the following approach:
+This project was built with **Codex (opencode CLI)** orchestrating **GPT-5.6** through the OpenAI SDK. Here's how they worked together:
 
-- **`agent-browser`** skill used to inspect visual reference prototype HTML
-- All TypeScript types (`lib/types.ts`) defined upfront for type safety
-- System prompts in `lib/prompts.ts` follow Socratic mirror philosophy (never argue, only ask)
-- React Flow custom node (`BeliefNode.tsx`) renders Fact vs Leap split card with status-based color transitions
-- Chat auto-advances through assumptions without gamification — just clean dialogue
+### Codex (Engineering Agent)
+- **`agent-browser`** skill — inspected visual reference prototype HTML to reverse-engineer the layout
+- **`engineer`** subagent — wrote all TypeScript, React components, API routes, and prompt scaffolds in a single session
+- **Structured file generation** — produced `lib/types.ts`, `lib/prompts.ts`, `lib/openai.ts`, and all routes with zero manual edits
+- **Graph construction** — built custom `BeliefNode.tsx` for React Flow with Fact/Leap split-card and status color transitions
+- **Prompt engineering** — crafted Socratic Mirror system prompts in `lib/prompts.ts` that force the AI to never argue, only ask
+
+### GPT-5.6 (Reasoning Engine)
+- **Structured Outputs** — `/api/deconstruct` and `/api/reflect` return validated JSON via GPT-5.6's built-in JSON schema mode (no manual parsing)
+- **Socratic dialogue** — generates follow-up questions that adapt to user answers, maintaining the Socratic Mirror constraint
+- **Graph generation** — takes a raw belief string and outputs a complete node graph with root, 3+ assumptions, balanced perspectives, and The Middle Way
+- **Validation** — checks user responses against prior context before advancing the conversation
+
+### Workflow
+```
+User prompt → Codex parses intent → writes code / edits files
+           → GPT-5.6 backs API routes at runtime
+           → Structured Outputs return typed JSON to React Flow graph
+```
 
 **Key decisions:**
 - No game mechanics or scores — pure Socratic deconstruction

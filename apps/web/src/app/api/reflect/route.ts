@@ -1,4 +1,4 @@
-import { MODEL, REFLECT_SYSTEM_PROMPT, getOpenAI, provider, safeParseJson } from "@workspace/core";
+import { MODEL, REFLECT_SYSTEM_PROMPT, getOpenAI, safeParseJson } from "@workspace/core";
 import type { ReflectRequest, ReflectResponse } from "@workspace/core";
 import { NextResponse } from "next/server";
 
@@ -44,13 +44,7 @@ export async function POST(request: Request) {
           content: `${body.userResponse}\n\n${JSON_INSTRUCTIONS}`,
         },
       ],
-      ...(provider === "deepseek"
-        ? { response_format: { type: "json_object" } as const }
-        : {
-            response_format: {
-              type: "json_object",
-            } as const,
-          }),
+      response_format: { type: "json_object" },
     });
 
     const content = completion.choices[0]?.message?.content;

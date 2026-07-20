@@ -1,26 +1,25 @@
 import OpenAI from "openai";
 
-// Auto-detect provider: use DeepSeek if key present, otherwise OpenAI
-const useDeepSeek = !!process.env.DEEPSEEK_API_KEY;
+// Actual API provider is DeepSeek (OpenAI-compatible SDK).
+// Use OPENAI_API_KEY / OPENAI_MODEL / OPENAI_BASE_URL env vars for config.
+// Default baseURL points to DeepSeek.
 
-export const provider = useDeepSeek ? "deepseek" : "openai";
+export const provider = "deepseek";
 
-export const MODEL = useDeepSeek
-  ? (process.env.DEEPSEEK_MODEL ?? "deepseek-chat")
-  : (process.env.OPENAI_MODEL ?? "gpt-5.6");
+export const MODEL = process.env.OPENAI_MODEL ?? "deepseek-chat";
 
 let _openai: OpenAI | null = null;
 
 /**
- * Lazily initializes and returns the OpenAI (or DeepSeek) client.
+ * Lazily initializes and returns the OpenAI-compatible client (DeepSeek).
  * Construction is deferred until first call, so importing this module
  * doesn't crash at build time when env vars are absent.
  */
 export function getOpenAI(): OpenAI {
   if (!_openai) {
     _openai = new OpenAI({
-      apiKey: useDeepSeek ? (process.env.DEEPSEEK_API_KEY ?? "") : (process.env.OPENAI_API_KEY ?? ""),
-      baseURL: useDeepSeek ? "https://api.deepseek.com" : undefined,
+      apiKey: process.env.OPENAI_API_KEY ?? "",
+      baseURL: process.env.OPENAI_BASE_URL ?? "https://api.deepseek.com",
     });
   }
   return _openai;
