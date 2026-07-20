@@ -1,4 +1,4 @@
-import { DECONSTRUCT_SYSTEM_PROMPT, MODEL, openai, provider, safeParseJson } from "@workspace/core";
+import { DECONSTRUCT_SYSTEM_PROMPT, MODEL, getOpenAI, provider, safeParseJson } from "@workspace/core";
 import type { DeconstructRequest, DeconstructResponse } from "@workspace/core";
 import { NextResponse } from "next/server";
 
@@ -40,7 +40,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const completion = await openai.chat.completions.create({
+    const completion = await getOpenAI().chat.completions.create({
       model: MODEL,
       messages: [
         { role: "system", content: DECONSTRUCT_SYSTEM_PROMPT },

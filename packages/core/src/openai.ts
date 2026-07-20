@@ -9,10 +9,22 @@ export const MODEL = useDeepSeek
   ? (process.env.DEEPSEEK_MODEL ?? "deepseek-chat")
   : (process.env.OPENAI_MODEL ?? "gpt-5.6");
 
-export const openai = new OpenAI({
-  apiKey: useDeepSeek ? (process.env.DEEPSEEK_API_KEY ?? "") : (process.env.OPENAI_API_KEY ?? ""),
-  baseURL: useDeepSeek ? "https://api.deepseek.com" : undefined,
-});
+let _openai: OpenAI | null = null;
+
+/**
+ * Lazily initializes and returns the OpenAI (or DeepSeek) client.
+ * Construction is deferred until first call, so importing this module
+ * doesn't crash at build time when env vars are absent.
+ */
+export function getOpenAI(): OpenAI {
+  if (!_openai) {
+    _openai = new OpenAI({
+      apiKey: useDeepSeek ? (process.env.DEEPSEEK_API_KEY ?? "") : (process.env.OPENAI_API_KEY ?? ""),
+      baseURL: useDeepSeek ? "https://api.deepseek.com" : undefined,
+    });
+  }
+  return _openai;
+}
 
 /**
  * Extracts and parses a JSON object from potentially messy assistant output.

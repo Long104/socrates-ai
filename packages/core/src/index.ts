@@ -1,3 +1,3 @@
 export * from "./types";
 export * from "./prompts";
-export { openai, MODEL, provider, safeParseJson } from "./openai";
+export { getOpenAI, MODEL, provider, safeParseJson } from "./openai";

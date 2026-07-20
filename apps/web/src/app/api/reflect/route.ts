@@ -1,4 +1,4 @@
-import { MODEL, REFLECT_SYSTEM_PROMPT, openai, provider, safeParseJson } from "@workspace/core";
+import { MODEL, REFLECT_SYSTEM_PROMPT, getOpenAI, provider, safeParseJson } from "@workspace/core";
 import type { ReflectRequest, ReflectResponse } from "@workspace/core";
 import { NextResponse } from "next/server";
 
@@ -35,7 +35,7 @@ export async function POST(request: Request) {
       .replace("{leap}", body.assumption.leap)
       .replace("{userResponse}", body.userResponse);
 
-    const completion = await openai.chat.completions.create({
+    const completion = await getOpenAI().chat.completions.create({
       model: MODEL,
       messages: [
         { role: "system", content: systemPrompt },

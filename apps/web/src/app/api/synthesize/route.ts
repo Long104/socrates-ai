@@ -1,4 +1,4 @@
-import { MODEL, SYNTHESIZE_SYSTEM_PROMPT, openai, provider, safeParseJson } from "@workspace/core";
+import { MODEL, SYNTHESIZE_SYSTEM_PROMPT, getOpenAI, provider, safeParseJson } from "@workspace/core";
 import type { SynthesizeRequest, SynthesizeResponse } from "@workspace/core";
 import { NextResponse } from "next/server";
 
@@ -34,7 +34,7 @@ export async function POST(request: Request) {
       resolvedList
     );
 
-    const completion = await openai.chat.completions.create({
+    const completion = await getOpenAI().chat.completions.create({
       model: MODEL,
       messages: [
         { role: "system", content: systemPrompt },

@@ -1,9 +1,9 @@
-import { MODEL, openai, provider } from "@workspace/core";
+import { MODEL, getOpenAI, provider } from "@workspace/core";
 import { NextResponse } from "next/server";
 
 export async function POST() {
   try {
-    const completion = await openai.chat.completions.create({
+    const completion = await getOpenAI().chat.completions.create({
       model: MODEL,
       messages: [
         {
