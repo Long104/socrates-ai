@@ -152,7 +152,7 @@ export default function Home() {
     setMessages((prev) => [
       ...prev,
       { role: "user", text: beliefText },
-      { role: "ai", text: "Analyzing your belief structure..." },
+      { role: "ai", text: "..." },
     ]);
 
     try {
@@ -168,13 +168,13 @@ export default function Home() {
       setDeconstructData(data);
       setCurrentAssumptionIndex(0);
 
-      // Replace loading message with first assumption question
+      // Replace loading message with first question — pure Socratic, no meta
       setMessages((prev) => {
         const updated = prev.slice(0, -1);
         const firstQ = data.assumptions[0]?.socraticQuestion;
         updated.push({
           role: "ai",
-          text: `I've deconstructed your belief into its core components. Look at the graph on the right.<br/><br/>Let's start with <strong>Supporting View A</strong>.<br/><br/><em>${firstQ}</em>`,
+          text: firstQ,
         });
         return updated;
       });
@@ -238,7 +238,7 @@ export default function Home() {
               ...prev,
               {
                 role: "ai",
-                text: `Let's move to the next assumption.<br/><br/><em>${nextAssumption.socraticQuestion}</em>`,
+                text: nextAssumption.socraticQuestion,
               },
             ]);
             setPhase("reflecting");
@@ -265,7 +265,7 @@ export default function Home() {
               ...prev,
               {
                 role: "ai",
-                text: `All assumptions examined. <strong>The Middle Way</strong> has emerged at the bottom of the graph.<br/><br/><em>${synData.middleWay}</em><br/><br/>Sit with this. How does it feel compared to the heavy view you carried?`,
+                text: synData.middleWay,
               },
             ]);
             setPhase("complete");
@@ -297,7 +297,7 @@ export default function Home() {
             ...prev,
             {
               role: "ai",
-              text: `All assumptions examined. <strong>The Middle Way</strong> has emerged at the bottom of the graph.<br/><br/><em>${synData.middleWay}</em><br/><br/>Sit with this. How does it feel compared to the heavy view you carried?`,
+              text: synData.middleWay,
             },
           ]);
           setPhase("complete");
