@@ -96,8 +96,8 @@ export default function ChatPanel({
       </div>
 
       {/* Chat Messages */}
-      <ScrollArea className="flex-1">
-        <div className="p-4 space-y-4">
+      <ScrollArea className="flex-1 overflow-hidden">
+        <div className="p-4 space-y-4 min-h-full">
           {messages.length === 0 && (
             <div
               className="flex items-center justify-center h-full text-sm italic"

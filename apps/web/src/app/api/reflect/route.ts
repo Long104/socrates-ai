@@ -13,9 +13,10 @@ You MUST return a JSON object with EXACTLY this structure:
 }
 
 Rules:
-- ALWAYS validate the fact first in your aiResponse ("You're right that...")
-- leapResolved = true ONLY if the user acknowledged a real exception to the absolute claim
-- nextAction: 'advance' = move to next assumption, 'pushback' = reframe deeper, 'complete' = all resolved
+- ALWAYS validate the fact first in your aiResponse
+- leapResolved = true if the user shows ANY openness or acknowledges nuance (even partial concession)
+- nextAction: 'advance' = user showed openness, move to next question; 'pushback' = user defended absolutism, ask sharper; 'complete' = all resolved
+- BE GENEROUS: if user says "yes", "maybe", "I suppose", "fair point" → advance
 - Return ONLY valid JSON, no markdown, no explanation
 `;
 
