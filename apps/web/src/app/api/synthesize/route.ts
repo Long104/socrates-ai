@@ -3,7 +3,7 @@ import type { SynthesizeRequest, SynthesizeResponse } from "@workspace/core";
 import { NextResponse } from "next/server";
 
 const JSON_INSTRUCTIONS = `
-Return ONLY valid JSON: { "middleWay": "<1-2 sentence string, max 40 words>" }
+Return ONLY valid JSON: { "middleWay": "<1-2 sentence string, max 40 words, simple enough for anyone to understand>" }
 No markdown. No explanation.
 `;
 
@@ -68,7 +68,7 @@ export async function POST(request: Request) {
     console.error("Synthesize error:", error);
     return NextResponse.json(
       {
-        error: "Failed to synthesize Middle Way",
+        error: "Failed to find the balance",
         detail: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 }

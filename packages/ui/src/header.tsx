@@ -29,7 +29,7 @@ export default function Header({ mindState }: HeaderProps) {
             fontFamily: "var(--font-geist-mono)",
           }}
         >
-          Socratic Mirror
+          Think Clearly
         </span>
       </div>
 
@@ -50,7 +50,7 @@ export default function Header({ mindState }: HeaderProps) {
             transition: shouldReduceMotion ? "none" : "background-color 0.5s ease-out",
           }}
         />
-        {isUntangled ? "Untangled" : "Untangling..."}
+        {isUntangled ? "Done" : "Working..."}
       </Badge>
     </header>
   );

@@ -7,7 +7,7 @@ You MUST return a JSON object with EXACTLY this structure:
 {
   "factValidated": <boolean>,
   "leapResolved": <boolean — true if user found a real exception to the leap>,
-  "aiResponse": "<your Socratic response — validate fact first, then address the leap>",
+  "aiResponse": "<your response — check their real observation first, then ask about the jump>",
   "resolvedText": "<if leapResolved is true, provide a lighter reframed version of the leap; otherwise empty string>",
   "nextAction": "<one of: 'advance' | 'pushback' | 'complete'>"
 }

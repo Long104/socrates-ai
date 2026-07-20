@@ -23,13 +23,13 @@ function BeliefNode({ data }: NodeProps<BeliefNodeType>) {
             className="text-[9px] uppercase tracking-[0.12em]"
             style={{ fontFamily: "var(--font-geist-mono)", color: "var(--muted-foreground)" }}
           >
-            Root Belief
+            Core Thought
           </span>
           <span
             className="text-[9px] uppercase tracking-[0.12em]"
             style={{ fontFamily: "var(--font-geist-mono)", color: "var(--muted-foreground)" }}
           >
-            Seed
+            Start
           </span>
         </div>
         <div className="p-3">
@@ -90,7 +90,7 @@ function BeliefNode({ data }: NodeProps<BeliefNodeType>) {
               color: isResolved ? "var(--middle-way-glow)" : "var(--muted-foreground)",
             }}
           >
-            {isResolved ? "Synthesized" : "Awaiting"}
+            {isResolved ? "Resolved" : "Waiting"}
           </span>
         </div>
         <div className="p-4">
@@ -110,7 +110,7 @@ function BeliefNode({ data }: NodeProps<BeliefNodeType>) {
                 color: "var(--muted-foreground)",
               }}
             >
-              Examine each leap above&hellip;
+              Look at each jump above&hellip;
             </p>
           )}
         </div>
@@ -127,7 +127,7 @@ function BeliefNode({ data }: NodeProps<BeliefNodeType>) {
       ? "var(--accent)"
       : "var(--muted)";
   const borderOpacity = isResolved ? "/40" : isHeavy ? "/40" : "";
-  const statusLabel = isResolved ? "Open" : isHeavy ? "Heavy" : "Locked";
+  const statusLabel = isResolved ? "Resolved" : isHeavy ? "Examining" : "Locked";
   const statusColor = isResolved
     ? "var(--leap-resolved)"
     : isHeavy
@@ -163,7 +163,7 @@ function BeliefNode({ data }: NodeProps<BeliefNodeType>) {
           className="text-[9px] uppercase tracking-[0.12em]"
           style={{ fontFamily: "var(--font-geist-mono)", color: "var(--muted-foreground)" }}
         >
-          {label}
+          {label.replace("SUPPORTING VIEW", "Hidden View")}
         </span>
         <span
           className="text-[9px] uppercase tracking-[0.12em] transition-all duration-500"

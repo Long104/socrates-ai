@@ -21,7 +21,7 @@ export default function Home() {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       role: "ai",
-      text: "Welcome to <strong>Socrates AI</strong>. Type a rigid belief or worldview you hold, something that feels absolute, and I'll help you deconstruct it using the Socratic Method.",
+      text: "Welcome to <strong>Socrates AI</strong>. Got a thought that feels absolute — like something is always true or will never change? Share it, and we'll look at it together.",
     },
   ]);
   const [mindState, setMindState] = useState<"untangling" | "untangled">("untangling");
@@ -91,7 +91,7 @@ export default function Home() {
         type: "beliefNode",
         position: assumptionPositions[i] ?? { x: 0, y: 250 },
         data: {
-          label: `SUPPORTING VIEW ${String.fromCharCode(65 + i)}`,
+          label: `Hidden View ${String.fromCharCode(65 + i)}`,
           type: "assumption",
           fact: assumption.fact,
           leap: isResolved
@@ -185,7 +185,7 @@ export default function Home() {
         const updated = prev.slice(0, -1);
         updated.push({
           role: "ai",
-          text: "Sorry, I encountered an error deconstructing your belief. Please check your API key and try again.",
+          text: "Sorry, I ran into an error. Please check your API key and try again.",
         });
         return updated;
       });
@@ -335,7 +335,7 @@ export default function Home() {
     if (!deconstructData) return "";
     const current = deconstructData.assumptions[currentAssumptionIndex];
     if (!current) return "";
-    return `Inspecting: ${current.fact.length > 40 ? `${current.fact.slice(0, 40)}...` : current.fact}`;
+    return `Looking at: ${current.fact.length > 40 ? `${current.fact.slice(0, 40)}...` : current.fact}`;
   }, [phase, deconstructData, currentAssumptionIndex]);
 
   // Determine distortion warning
@@ -344,7 +344,7 @@ export default function Home() {
     if (!deconstructData) return undefined;
     const current = deconstructData.assumptions[currentAssumptionIndex];
     if (!current) return undefined;
-    return `Inspecting heavy leap: "${current.leap}"`;
+    return `Looking at a big jump: "${current.leap}"`;
   }, [phase, deconstructData, currentAssumptionIndex]);
 
   return (
@@ -366,14 +366,14 @@ export default function Home() {
                 color: "var(--foreground)",
               }}
             >
-              What belief feels heavy?
+              What do you believe?
             </h1>
             <p
               className="text-[14px] max-w-prose mb-6"
               style={{ color: "var(--muted-foreground)", fontFamily: "var(--font-geist)" }}
             >
-              Type a rigid worldview, an anxiety-inducing thought, or an absolute statement.
-              I&apos;ll help you find the Middle Way.
+              Share a thought you feel sure about — something black and white.
+              We'll explore it step by step.
             </p>
             <form
               onSubmit={(e) => {
@@ -403,7 +403,7 @@ export default function Home() {
                   borderRadius: "6px",
                 }}
               >
-                Deconstruct
+                Look Closer
               </button>
             </form>
           </div>
@@ -421,7 +421,7 @@ export default function Home() {
                 borderTopColor: "transparent",
               }}
             />
-            <p className="text-[var(--foreground)] text-sm">Deconstructing belief...</p>
+            <p className="text-[var(--foreground)] text-sm">Thinking...</p>
           </div>
         </div>
       )}

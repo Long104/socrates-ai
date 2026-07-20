@@ -68,7 +68,7 @@ export default function ChatPanel({
               color: "var(--muted-foreground)",
             }}
           >
-            Dialogue Window
+            Conversation
           </span>
           {activeNodeTitle && (
             <p
@@ -103,7 +103,7 @@ export default function ChatPanel({
               className="flex items-center justify-center h-full text-sm italic"
               style={{ color: "var(--muted-foreground)" }}
             >
-              Type a belief below to begin deconstruction&hellip;
+              Share a thought to begin&hellip;
             </div>
           )}
           {messages.map((msg, i) => {
@@ -118,7 +118,7 @@ export default function ChatPanel({
                       color: "var(--muted-foreground)",
                     }}
                   >
-                    User Reflection
+                    You Said
                   </span>
                   <div
                     className="rounded-md p-3 text-[14px] leading-relaxed"
@@ -185,9 +185,9 @@ export default function ChatPanel({
             onKeyDown={handleKeyDown}
             placeholder={
               isComplete
-                ? "Session completed. Peace reached."
+                ? "All done. You found your answer."
                 : disabled
-                  ? "AI is reflecting..."
+                  ? "Thinking..."
                   : "Type your response here..."
             }
             disabled={disabled || isComplete}

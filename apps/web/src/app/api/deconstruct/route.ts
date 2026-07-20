@@ -13,9 +13,9 @@ You MUST return a JSON object with EXACTLY this structure:
   "assumptions": [
     {
       "id": "assumption-1",
-      "fact": "<a real-world observation that is TRUE — something we validate>",
-      "leap": "<the absolute cognitive distortion — uses words like all/always/never/pure/completely>",
-      "socraticQuestion": "<a Socratic question that helps the user find their own exception to the leap>"
+      "fact": "<a real observation that is TRUE — what they actually saw>",
+      "leap": "<the part where they jumped too far — uses words like all/always/never/pure/completely>",
+      "socraticQuestion": "<a question that helps them see their own exception to the jump>"
     },
     ... (exactly 2 assumptions total)
   ],
@@ -24,7 +24,7 @@ You MUST return a JSON object with EXACTLY this structure:
 
 Rules:
 - Generate exactly 2 assumptions (not more, not less)
-- Each assumption must have a FACT (true observation) and a LEAP (absolute distortion)
+- Each hidden idea must have a FACT (true observation) and a LEAP (where they jumped too far)
 - Never tell the user they are wrong — frame the question so THEY find the exception
 - Return ONLY valid JSON, no markdown, no explanation
 `;
@@ -75,7 +75,7 @@ export async function POST(request: Request) {
     console.error("Deconstruct error:", error);
     return NextResponse.json(
       {
-        error: "Failed to deconstruct belief",
+        error: "Failed to process your thought",
         detail: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 }
