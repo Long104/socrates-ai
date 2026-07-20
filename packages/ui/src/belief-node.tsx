@@ -9,107 +9,179 @@ type BeliefNodeType = Node<BeliefNodeData>;
 function BeliefNode({ data }: NodeProps<BeliefNodeType>) {
   const { label, type, fact, leap, status } = data;
 
-  const borderColor =
-    status === "resolved"
-      ? "border-teal-500"
-      : status === "heavy"
-        ? "border-amber-500"
-        : "border-slate-700";
-
-  const opacity = status === "locked" ? "opacity-40" : "opacity-100";
-
   if (type === "root") {
     return (
       <div
-        className={`${borderColor} ${opacity} bg-slate-900/95 rounded-xl p-3 w-[260px] shadow-lg border-2 transition-all duration-500`}
+        className="w-[300px] rounded-md bg-[var(--card)] border border-[var(--border)] shadow-[0_2px_8px_rgba(0,0,0,0.15)]"
+        style={{ borderRadius: "6px" }}
       >
         <Handle type="source" position={Position.Bottom} />
-        <div className="flex items-center justify-between text-[10px] text-cyan-400 font-semibold mb-1 font-mono">
-          <span>ROOT BELIEF</span>
-          <span className="bg-cyan-500/10 px-1.5 py-0.5 rounded border border-cyan-500/20">
-            Anxiety Driver
+        <div className="flex items-center justify-between px-3 py-1.5 border-b border-[var(--border)] bg-[var(--muted)]/50">
+          <span
+            className="text-[9px] uppercase tracking-[0.12em]"
+            style={{ fontFamily: "var(--font-geist-mono)", color: "var(--muted-foreground)" }}
+          >
+            Root Belief
+          </span>
+          <span
+            className="text-[9px] uppercase tracking-[0.12em]"
+            style={{ fontFamily: "var(--font-geist-mono)", color: "var(--muted-foreground)" }}
+          >
+            Seed
           </span>
         </div>
-        <p className="text-xs font-medium text-slate-100 leading-relaxed">&ldquo;{label}&rdquo;</p>
+        <div className="p-3">
+          <p
+            className="text-[18px] leading-[1.45] tracking-[-0.01em] text-[var(--foreground)]"
+            style={{ fontFamily: "var(--font-newsreader)", fontStyle: "italic" }}
+          >
+            &ldquo;{label}&rdquo;
+          </p>
+        </div>
       </div>
     );
   }
 
   if (type === "middle-way") {
     const isResolved = status === "resolved";
+    const borderColor = isResolved ? "var(--middle-way-glow)" : "var(--border)";
+    const borderWidth = isResolved ? "2px" : "2px";
+    const shadow = isResolved ? "0 0 40px -8px var(--middle-way-glow)" : "none";
+    const opacity = status === "locked" ? "opacity-50" : "opacity-100";
+
     return (
       <div
-        className={`${borderColor} ${opacity} bg-slate-900/95 rounded-xl overflow-hidden w-[280px] shadow-lg border transition-all duration-500`}
+        className={`w-[340px] rounded-md ${opacity}`}
+        style={{
+          borderRadius: "6px",
+          backgroundColor: "var(--card)",
+          border: `${borderWidth} solid ${borderColor}`,
+          boxShadow: shadow,
+        }}
       >
         <Handle type="target" position={Position.Top} />
-        <div
-          className={`bg-slate-800/80 px-3 py-1.5 border-b ${
-            isResolved ? "border-cyan-500/30" : "border-slate-700/50"
-          } flex justify-between text-[9px] font-mono ${
-            isResolved ? "text-cyan-400" : "text-slate-400"
-          } font-semibold`}
-        >
-          <span>THE MIDDLE WAY</span>
+        <div className="flex items-center justify-between px-3 py-1.5 border-b border-[var(--border)] bg-[var(--muted)]/50">
           <span
-            className={
-              isResolved
-                ? "bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 px-1.5 py-0.5 rounded"
-                : ""
-            }
+            className="text-[9px] uppercase tracking-[0.12em]"
+            style={{ fontFamily: "var(--font-geist-mono)", color: "var(--muted-foreground)" }}
           >
-            {isResolved ? "Balanced View" : "Locked"}
+            The Middle Way
+          </span>
+          <span
+            className="text-[9px] uppercase tracking-[0.12em]"
+            style={{
+              fontFamily: "var(--font-geist-mono)",
+              color: isResolved ? "var(--middle-way-glow)" : "var(--muted-foreground)",
+            }}
+          >
+            {isResolved ? "Synthesized" : "Awaiting"}
           </span>
         </div>
-        <div className="p-2.5 text-xs leading-relaxed">
+        <div className="p-4">
           {isResolved ? (
-            <p className="text-slate-100 font-medium">&ldquo;{label}&rdquo;</p>
+            <p
+              className="text-[17px] leading-[1.4] text-center text-pretty text-[var(--foreground)]"
+              style={{ fontFamily: "var(--font-newsreader)", fontStyle: "italic" }}
+            >
+              &ldquo;{label}&rdquo;
+            </p>
           ) : (
-            <p className="text-slate-400 italic">Examine the heavy leaps above to unlock&hellip;</p>
+            <p
+              className="text-[13px] leading-relaxed"
+              style={{
+                fontFamily: "var(--font-newsreader)",
+                fontStyle: "italic",
+                color: "var(--muted-foreground)",
+              }}
+            >
+              Examine each leap above&hellip;
+            </p>
           )}
         </div>
       </div>
     );
   }
 
-  // assumption node
-  const leapTextColor = status === "resolved" ? "text-teal-500" : "text-amber-500";
-  const leapBgColor = status === "resolved" ? "bg-teal-950/20" : "bg-transparent";
+  // Assumption node
+  const isResolved = status === "resolved";
+  const isHeavy = status === "heavy";
+  const borderColor = isResolved
+    ? "var(--leap-resolved)"
+    : isHeavy
+      ? "var(--accent)"
+      : "var(--muted)";
+  const borderOpacity = isResolved ? "/40" : isHeavy ? "/40" : "";
+  const statusLabel = isResolved ? "Open" : isHeavy ? "Heavy" : "Locked";
+  const statusColor = isResolved
+    ? "var(--leap-resolved)"
+    : isHeavy
+      ? "var(--accent)"
+      : "var(--muted-foreground)";
+
+  // Locked nodes are hidden (progressive reveal)
+  if (status === "locked") {
+    return null;
+  }
 
   return (
     <div
-      className={`${borderColor} ${opacity} bg-slate-900/95 rounded-xl overflow-hidden w-[220px] shadow-lg border transition-all duration-500`}
+      className="w-[240px] bg-[var(--card)] rounded-md"
+      style={{
+        borderRadius: "6px",
+        border: isResolved
+          ? "1px solid color-mix(in oklch, var(--leap-resolved) 40%, transparent)"
+          : "1px solid color-mix(in oklch, var(--accent) 40%, transparent)",
+      }}
     >
       <Handle type="target" position={Position.Top} />
-      <div className="bg-slate-800/80 px-2.5 py-1.5 border-b border-slate-700/50 flex justify-between text-[9px] font-mono font-semibold">
-        <span className={status === "resolved" ? "text-teal-400" : "text-amber-400"}>{label}</span>
+      <div className="flex items-center justify-between px-2.5 py-1.5 border-b border-[var(--border)] bg-[var(--muted)]/50">
         <span
-          className={
-            status === "resolved"
-              ? "text-teal-400"
-              : status === "heavy"
-                ? "text-amber-400"
-                : "text-slate-400"
-          }
+          className="text-[9px] uppercase tracking-[0.12em]"
+          style={{ fontFamily: "var(--font-geist-mono)", color: "var(--muted-foreground)" }}
         >
-          {status === "resolved" ? "Open Space" : status === "heavy" ? "Heavy" : "Locked"}
+          {label}
+        </span>
+        <span
+          className="text-[9px] uppercase tracking-[0.12em]"
+          style={{ fontFamily: "var(--font-geist-mono)", color: statusColor }}
+        >
+          {statusLabel}
         </span>
       </div>
-      <div className="bg-slate-950/40 p-2 border-b border-slate-800/50">
-        <span className="text-[8px] uppercase tracking-wider font-mono text-slate-500 block mb-0.5 font-semibold">
-          Fact (True)
-        </span>
-        <p className="text-[10px] text-slate-400 leading-tight">{fact}</p>
-      </div>
-      <div className={`p-2 ${leapBgColor}`}>
+
+      {/* Fact section */}
+      {fact && (
+        <div className="p-2.5 border-b border-dashed border-[var(--border)]">
+          <span
+            className="text-[8px] uppercase tracking-[0.12em] block mb-0.5"
+            style={{ fontFamily: "var(--font-geist-mono)", color: "var(--muted-foreground)" }}
+          >
+            Fact
+          </span>
+          <p
+            className="text-[11px] leading-snug"
+            style={{ fontFamily: "var(--font-geist)", color: "var(--fact)" }}
+          >
+            {fact}
+          </p>
+        </div>
+      )}
+
+      {/* Leap section */}
+      <div className="p-2.5">
         <span
-          className={`text-[8px] uppercase tracking-wider font-mono ${leapTextColor} block mb-0.5 font-semibold`}
+          className="text-[8px] uppercase tracking-[0.12em] block mb-0.5"
+          style={{ fontFamily: "var(--font-geist-mono)", color: statusColor }}
         >
-          Leap (Assumption)
+          Leap
         </span>
         <p
-          className={`text-[10.5px] leading-tight ${
-            status === "resolved" ? "text-teal-300 italic" : "text-slate-100"
-          }`}
+          className="text-[11px] leading-snug"
+          style={{
+            fontFamily: isResolved ? "var(--font-newsreader)" : "var(--font-geist)",
+            fontStyle: isResolved ? "italic" : "normal",
+            color: isResolved ? "var(--leap-resolved)" : "var(--foreground)",
+          }}
         >
           {leap}
         </p>

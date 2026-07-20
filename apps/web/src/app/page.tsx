@@ -104,15 +104,17 @@ export default function Home() {
 
       // Edge from root to assumption
       const rootToEdgeId = `root-${assumption.id}`;
+      const edgeStyle = isResolved
+        ? { stroke: "var(--leap-resolved)", strokeWidth: 2 }
+        : isCurrent
+          ? { stroke: "var(--accent)", strokeWidth: 2, strokeDasharray: "6 4" }
+          : { stroke: "var(--muted-foreground)", strokeWidth: 1.5, strokeDasharray: "4 4" };
+
       edgeList.push({
         id: rootToEdgeId,
         source: deconstructData.rootNode.id,
         target: assumption.id,
-        style: {
-          stroke: isResolved ? "#14b8a6" : isCurrent ? "#f59e0b" : "#475569",
-          strokeWidth: 2,
-          strokeDasharray: isResolved ? undefined : "5,5",
-        },
+        style: edgeStyle,
       });
 
       // Edge from assumption to middle way
@@ -121,9 +123,9 @@ export default function Home() {
         source: assumption.id,
         target: "middle-way",
         style: {
-          stroke: isResolved ? "#06b6d4" : "#475569",
-          strokeWidth: 2,
-          strokeDasharray: isResolved ? undefined : "5,5",
+          stroke: isResolved ? "var(--leap-resolved)" : "var(--muted-foreground)",
+          strokeWidth: isResolved ? 2 : 1.5,
+          strokeDasharray: isResolved ? undefined : "4 4",
         },
       });
     });
@@ -350,10 +352,25 @@ export default function Home() {
 
       {/* Belief Input Overlay */}
       {phase === "input" && (
-        <div className="absolute inset-0 z-20 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm">
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 max-w-lg w-full mx-4 shadow-2xl">
-            <h1 className="text-2xl font-bold text-slate-100 mb-2">What belief feels heavy?</h1>
-            <p className="text-sm text-slate-400 mb-6">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--background)]/85 backdrop-blur-md">
+          <div
+            className="bg-[var(--card)] border border-[var(--border)] p-8 max-w-lg w-full mx-4"
+            style={{ borderRadius: "8px" }}
+          >
+            <h1
+              className="text-[clamp(2rem,5vw,3.25rem)] tracking-[-0.02em] leading-[1.1] text-balance mb-2"
+              style={{
+                fontFamily: "var(--font-newsreader)",
+                fontStyle: "italic",
+                color: "var(--foreground)",
+              }}
+            >
+              What belief feels heavy?
+            </h1>
+            <p
+              className="text-[14px] max-w-prose mb-6"
+              style={{ color: "var(--muted-foreground)", fontFamily: "var(--font-geist)" }}
+            >
               Type a rigid worldview, an anxiety-inducing thought, or an absolute statement.
               I&apos;ll help you find the Middle Way.
             </p>
@@ -370,11 +387,20 @@ export default function Home() {
                 name="beliefInput"
                 rows={3}
                 placeholder='"Capitalism is pure evil." or "I will never be good enough."'
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-cyan-500 text-slate-100 placeholder-slate-500 resize-none"
+                className="w-full bg-[var(--background)] border border-[var(--border)] rounded-md px-4 py-3 text-[14px] resize-none outline-none transition-[border-color] duration-150 ease-out focus:border-[var(--accent)]"
+                style={{
+                  color: "var(--foreground)",
+                  fontFamily: "var(--font-geist)",
+                  borderRadius: "6px",
+                }}
               />
               <button
                 type="submit"
-                className="mt-4 w-full bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold text-sm px-6 py-3 rounded-xl transition"
+                className="mt-4 w-full bg-[var(--accent)] text-[var(--accent-foreground)] text-[14px] font-medium rounded-md py-3 transition-[transform] duration-150 ease-out hover:-translate-y-[0.5px] active:translate-y-0 active:scale-[0.99]"
+                style={{
+                  fontFamily: "var(--font-geist)",
+                  borderRadius: "6px",
+                }}
               >
                 Deconstruct
               </button>
@@ -385,10 +411,16 @@ export default function Home() {
 
       {/* Loading Overlay */}
       {phase === "loading" && (
-        <div className="absolute inset-0 z-20 flex items-center justify-center bg-slate-950/60 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--background)]/60 backdrop-blur-sm">
           <div className="text-center">
-            <div className="w-10 h-10 border-2 border-cyan-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-            <p className="text-slate-300 text-sm">Deconstructing belief...</p>
+            <div
+              className="w-10 h-10 border-2 border-t-transparent rounded-full animate-spin mx-auto mb-4"
+              style={{
+                borderColor: "var(--accent)",
+                borderTopColor: "transparent",
+              }}
+            />
+            <p className="text-[var(--foreground)] text-sm">Deconstructing belief...</p>
           </div>
         </div>
       )}

@@ -2,13 +2,36 @@
 @source "../../../../packages/ui/src";
 
 @theme inline {
-  --font-sans: var(--font-geist-sans);
+  /* Base — warm-ink dark, NOT slate */
+  --background: oklch(15% 0.008 240);
+  --foreground: oklch(91% 0.012 240);
+
+  --card: oklch(18% 0.01 240);
+  --card-foreground: oklch(91% 0.012 240);
+
+  --muted: oklch(23% 0.012 240);
+  --muted-foreground: oklch(64% 0.018 240);
+
+  --border: oklch(28% 0.015 240);
+
+  /* Accents */
+  --accent: oklch(72% 0.135 75);
+  --accent-foreground: oklch(15% 0.008 240);
+
+  /* Semantic — philosophical states */
+  --fact: oklch(78% 0.012 240);
+  --leap-heavy: oklch(72% 0.135 75);
+  --leap-resolved: oklch(75% 0.09 145);
+  --middle-way-glow: oklch(90% 0.035 95);
+
+  /* Font mappings */
+  --font-sans: var(--font-geist);
+  --font-serif: var(--font-newsreader);
   --font-mono: var(--font-geist-mono);
 }
 
 /* React Flow overrides */
 .react-flow__background {
-  background-color: #020617 !important;
   pointer-events: none;
 }
 
@@ -17,13 +40,13 @@
 }
 
 .react-flow__controls-button {
-  background-color: #0f172a !important;
-  border: 1px solid #1e293b !important;
-  fill: #94a3b8 !important;
+  background-color: oklch(18% 0.01 240) !important;
+  border: 1px solid oklch(28% 0.015 240) !important;
+  fill: oklch(64% 0.018 240) !important;
 }
 
 .react-flow__controls-button:hover {
-  background-color: #1e293b !important;
+  background-color: oklch(23% 0.012 240) !important;
 }
 
 .react-flow__attribution {

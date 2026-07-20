@@ -1,6 +1,6 @@
 "use client";
 
-import { Background, Controls, type Edge, type Node, ReactFlow } from "@xyflow/react";
+import { Background, type BackgroundVariant, type Edge, type Node, ReactFlow } from "@xyflow/react";
 import { useMemo } from "react";
 import "@xyflow/react/dist/style.css";
 
@@ -17,14 +17,14 @@ const nodeTypes = { beliefNode: BeliefNode };
 export default function GraphCanvas({ nodes, edges }: GraphCanvasProps) {
   const defaultEdgeOptions = useMemo(
     () => ({
-      style: { stroke: "#475569", strokeWidth: 2 },
+      style: { stroke: "var(--border)", strokeWidth: 1.5, strokeDasharray: "4 4" },
       animated: false,
     }),
     []
   );
 
   return (
-    <section className="w-7/12 relative bg-slate-950 flex items-center justify-center overflow-hidden">
+    <section className="flex-1 relative flex items-center justify-center overflow-hidden">
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -36,13 +36,8 @@ export default function GraphCanvas({ nodes, edges }: GraphCanvasProps) {
         fitViewOptions={{ padding: 0.3 }}
         minZoom={0.5}
         maxZoom={2}
-        className="bg-slate-950"
       >
-        <Background gap={48} size={1} color="#0f172a" className="opacity-20" />
-        <Controls
-          showInteractive={false}
-          className="[&>button]:bg-slate-900 [&>button]:border-slate-800 [&>button]:text-slate-400"
-        />
+        <Background variant={"dots" as BackgroundVariant} gap={24} size={1} color="var(--border)" />
       </ReactFlow>
     </section>
   );

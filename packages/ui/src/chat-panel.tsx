@@ -1,12 +1,12 @@
 "use client";
 
 import type { ChatMessage } from "@workspace/core";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { ScrollArea } from "./components/ui/scroll-area";
 
 interface ChatPanelProps {
   messages: ChatMessage[];
   onSend: (text: string) => void;
-  currentQuestion?: string;
   disabled: boolean;
   isComplete: boolean;
   distortionWarning?: string;
@@ -24,7 +24,8 @@ export default function ChatPanel({
   onAutoFill,
 }: ChatPanelProps) {
   const chatEndRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+  const [inputValue, setInputValue] = useState("");
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -38,30 +39,54 @@ export default function ChatPanel({
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const form = e.currentTarget;
-    const input = form.elements.namedItem("userInput") as HTMLInputElement;
-    const text = input.value.trim();
+    const text = inputValue.trim();
     if (!text) return;
     onSend(text);
-    input.value = "";
+    setInputValue("");
+  }
+
+  function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      const form = e.currentTarget.form;
+      if (form) form.requestSubmit();
+    }
   }
 
   return (
-    <section className="w-5/12 border-r border-slate-800 flex flex-col bg-slate-900/20">
+    <section
+      className="w-[40%] border-r border-[var(--border)] flex flex-col h-full"
+      style={{ backgroundColor: "var(--background)" }}
+    >
       {/* Active Node Header */}
-      <div className="p-4 bg-slate-900/60 border-b border-slate-800 flex justify-between items-center">
+      <div className="p-4 border-b border-[var(--border)] flex justify-between items-center">
         <div>
-          <span className="text-xs font-semibold uppercase tracking-wider text-slate-400 font-mono">
+          <span
+            className="text-[10px] uppercase tracking-[0.12em]"
+            style={{
+              fontFamily: "var(--font-geist-mono)",
+              color: "var(--muted-foreground)",
+            }}
+          >
             Dialogue Window
           </span>
           {activeNodeTitle && (
-            <h2 className="text-md font-semibold text-cyan-400 mt-1">{activeNodeTitle}</h2>
+            <p
+              className="text-[12px] mt-1"
+              style={{
+                fontFamily: "var(--font-geist-mono)",
+                color: "var(--muted-foreground)",
+              }}
+            >
+              {activeNodeTitle}
+            </p>
           )}
         </div>
         {onAutoFill && !isComplete && (
           <button
             onClick={onAutoFill}
-            className="text-[10px] bg-slate-800 hover:bg-slate-700 border border-slate-700 px-2 py-1 rounded font-mono text-cyan-400 transition"
+            className="text-[10px] bg-[var(--muted)] border border-[var(--border)] px-2 py-1 rounded font-mono"
+            style={{ color: "var(--muted-foreground)" }}
             title="Simulate a realistic resistant conversation"
           >
             Auto-Fill Demo
@@ -70,78 +95,128 @@ export default function ChatPanel({
       </div>
 
       {/* Chat Messages */}
-      <div className="flex-grow p-6 overflow-y-auto space-y-4" id="chat-container">
-        {messages.length === 0 && (
-          <div className="flex items-center justify-center h-full text-slate-500 text-sm italic">
-            Type a belief below to begin deconstruction&hellip;
-          </div>
-        )}
-        {messages.map((msg, i) => {
-          const isUser = msg.role === "user";
-          return (
+      <ScrollArea className="flex-1">
+        <div className="p-4 space-y-4">
+          {messages.length === 0 && (
             <div
-              key={i}
-              className={`flex items-start space-x-3 max-w-[85%] ${
-                isUser ? "ml-auto justify-end" : ""
-              }`}
+              className="flex items-center justify-center h-full text-sm italic"
+              style={{ color: "var(--muted-foreground)" }}
             >
-              {!isUser && (
-                <div className="w-8 h-8 rounded-full bg-slate-850 border border-slate-700 flex items-center justify-center text-xs shrink-0 text-cyan-400 font-bold">
-                  AI
-                </div>
-              )}
-              <div
-                className={`rounded-2xl p-4 text-sm leading-relaxed ${
-                  isUser
-                    ? "bg-cyan-600/10 border border-cyan-500/20 rounded-tr-none"
-                    : "bg-slate-900 border border-slate-800 rounded-tl-none"
-                }`}
-                dangerouslySetInnerHTML={{ __html: msg.text }}
-              />
-              {isUser && (
-                <div className="w-8 h-8 rounded-full bg-cyan-600 flex items-center justify-center text-xs shrink-0 text-slate-950 font-bold">
-                  ME
-                </div>
-              )}
+              Type a belief below to begin deconstruction&hellip;
             </div>
-          );
-        })}
-        <div ref={chatEndRef} />
-      </div>
+          )}
+          {messages.map((msg, i) => {
+            const isUser = msg.role === "user";
+            if (isUser) {
+              return (
+                <div key={i} className="max-w-[85%]">
+                  <span
+                    className="text-[9px] uppercase tracking-[0.12em] block mb-1"
+                    style={{
+                      fontFamily: "var(--font-geist-mono)",
+                      color: "var(--muted-foreground)",
+                    }}
+                  >
+                    User Reflection
+                  </span>
+                  <div
+                    className="rounded-md p-3 text-[14px] leading-relaxed"
+                    style={{
+                      backgroundColor: "var(--card)",
+                      border: "1px solid var(--border)",
+                      fontFamily: "var(--font-geist)",
+                      color: "var(--foreground)",
+                      borderRadius: "6px",
+                    }}
+                  >
+                    {msg.text}
+                  </div>
+                </div>
+              );
+            }
+            return (
+              <div key={i} className="pl-4 my-3" style={{ borderLeft: "2px solid var(--border)" }}>
+                <div
+                  className="text-[17px] leading-[1.55] tracking-[-0.005em]"
+                  style={{
+                    fontFamily: "var(--font-newsreader)",
+                    fontStyle: "italic",
+                    color: "var(--foreground)",
+                    maxWidth: "60ch",
+                    textWrap: "pretty",
+                  }}
+                  dangerouslySetInnerHTML={{ __html: msg.text }}
+                />
+              </div>
+            );
+          })}
+          <div ref={chatEndRef} />
+        </div>
+      </ScrollArea>
 
       {/* Distortion Warning */}
       {distortionWarning && (
-        <div className="mx-4 mb-2 flex items-center space-x-2 bg-amber-500/10 border border-amber-500/20 px-3 py-2 rounded-lg">
-          <span className="text-amber-400 text-xs">{distortionWarning}</span>
+        <div
+          className="mx-4 mb-2 rounded-md px-3 py-1.5 text-[11px] font-mono"
+          style={{
+            backgroundColor: "color-mix(in oklch, var(--accent) 10%, transparent)",
+            color: "var(--accent)",
+            border: "1px solid color-mix(in oklch, var(--accent) 30%, transparent)",
+            borderRadius: "6px",
+          }}
+        >
+          {distortionWarning}
         </div>
       )}
 
-      {/* Input Panel */}
-      <div className="p-4 border-t border-slate-800 bg-slate-950/80">
-        <form onSubmit={handleSubmit} className="space-y-3">
-          <div className="flex space-x-2">
-            <input
-              ref={inputRef}
-              name="userInput"
-              type="text"
-              placeholder={
-                isComplete
-                  ? "Session completed. Peace reached."
-                  : disabled
-                    ? "AI is reflecting..."
-                    : "Type your response here..."
-              }
-              disabled={disabled || isComplete}
-              className="flex-grow bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-cyan-500 disabled:opacity-50 disabled:cursor-not-allowed text-slate-100 placeholder-slate-500"
-            />
-            <button
-              type="submit"
-              disabled={disabled || isComplete}
-              className="bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold text-sm px-6 py-3 rounded-xl transition disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
+      {/* Input Bar */}
+      <div className="border-t border-[var(--border)] p-4">
+        <form onSubmit={handleSubmit} className="flex items-end gap-2">
+          <textarea
+            ref={inputRef}
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder={
+              isComplete
+                ? "Session completed. Peace reached."
+                : disabled
+                  ? "AI is reflecting..."
+                  : "Type your response here..."
+            }
+            disabled={disabled || isComplete}
+            rows={1}
+            className="flex-1 bg-[var(--background)] border border-[var(--border)] rounded-md px-3 py-2 text-[13px] resize-none outline-none transition-[border-color] duration-150 ease-out focus:border-[var(--accent)] disabled:opacity-50"
+            style={{
+              color: "var(--foreground)",
+              fontFamily: "var(--font-geist)",
+              borderRadius: "6px",
+            }}
+          />
+          <button
+            type="submit"
+            disabled={disabled || isComplete || !inputValue.trim()}
+            className="flex items-center justify-center p-2 rounded-md disabled:opacity-40"
+            style={{
+              backgroundColor: "var(--accent)",
+              color: "var(--accent-foreground)",
+              borderRadius: "6px",
+            }}
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             >
-              Reflect
-            </button>
-          </div>
+              <path d="M5 12h14" />
+              <path d="m12 5 7 7-7 7" />
+            </svg>
+          </button>
         </form>
       </div>
     </section>

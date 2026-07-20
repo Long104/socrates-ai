@@ -1,37 +1,57 @@
 "use client";
 
+import { useReducedMotion } from "motion/react";
+import { Badge } from "./components/ui/badge";
+
 interface HeaderProps {
   mindState: "untangling" | "untangled";
 }
 
 export default function Header({ mindState }: HeaderProps) {
   const isUntangled = mindState === "untangled";
+  const shouldReduceMotion = useReducedMotion();
+
   return (
-    <header className="border-b border-slate-800 bg-slate-900/50 backdrop-blur px-6 py-4 flex items-center justify-between">
-      <div className="flex items-center space-x-3">
-        <div className="w-8 h-8 rounded-lg bg-cyan-600 flex items-center justify-center font-bold text-lg text-slate-950">
-          S
-        </div>
-        <span className="text-xl font-bold tracking-tight text-slate-100">Socrates AI</span>
-        <span className="text-xs bg-cyan-500/10 text-cyan-400 px-2 py-1 rounded border border-cyan-500/20">
-          The Middle Way
+    <header className="h-14 border-b border-[var(--border)] flex items-center justify-between px-4">
+      {/* Left */}
+      <div className="flex items-center gap-2">
+        <span className="text-[16px] font-medium" style={{ fontFamily: "var(--font-geist)" }}>
+          Socrates AI
+        </span>
+        <span
+          className="w-[3px] h-[3px] rounded-full"
+          style={{ backgroundColor: "var(--muted-foreground)" }}
+        />
+        <span
+          className="text-[10px] uppercase tracking-[0.12em]"
+          style={{
+            color: "var(--muted-foreground)",
+            fontFamily: "var(--font-geist-mono)",
+          }}
+        >
+          Socratic Mirror
         </span>
       </div>
-      <div className="flex items-center space-x-6">
-        <div className="flex items-center space-x-2">
-          <span className="text-slate-400 text-sm font-medium">Mind State:</span>
-          <span
-            className={`font-mono font-bold text-sm ${
-              isUntangled ? "text-teal-400" : "text-amber-400"
-            }`}
-          >
-            {isUntangled ? "Untangled" : "Untangling Thoughts..."}
-          </span>
-        </div>
-        <div className="text-xs bg-slate-800 text-slate-300 px-3 py-1.5 rounded-full border border-slate-700">
-          Guide Mode: Socratic Mirror
-        </div>
-      </div>
+
+      {/* Right — Mind State */}
+      <Badge
+        variant="outline"
+        className="flex items-center gap-2 rounded-full px-3 py-1 text-[10px] font-mono uppercase tracking-[0.1em]"
+        style={{
+          backgroundColor: "var(--card)",
+          borderColor: "var(--border)",
+          color: "var(--muted-foreground)",
+        }}
+      >
+        <span
+          className="w-[6px] h-[6px] rounded-full"
+          style={{
+            backgroundColor: isUntangled ? "var(--leap-resolved)" : "var(--accent)",
+            transition: shouldReduceMotion ? "none" : "background-color 0.5s ease-out",
+          }}
+        />
+        {isUntangled ? "Untangled" : "Untangling..."}
+      </Badge>
     </header>
   );
 }
