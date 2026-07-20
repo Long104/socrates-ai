@@ -1,29 +1,43 @@
 ## Inspiration
 
-We noticed a pattern: when people hold rigid beliefs — "I'll never be good enough," "Capitalism is pure evil," "My life is over" — they can't see the exceptions. Arguments just make them dig in. But Socrates figured this out 2,400 years ago: don't argue, ask questions until they find the contradiction themselves. We built a tool that does that, at scale, with AI.
+A pattern we kept noticing: when someone holds a rigid belief ("I'll never be good enough," "Capitalism is pure evil," "My life is over"), they stop seeing exceptions. Arguing makes it worse. They dig in.
+
+Socrates figured this out 2,400 years ago. Don't argue. Ask questions until they hit the contradiction themselves. We wanted to see if an LLM could do that faithfully, at reading-speed, without slipping into lecture mode.
 
 ## What it does
 
-A visual thinking tool that breaks down absolute beliefs using Socratic questioning. You type a rigid thought, the AI finds the hidden assumptions underneath it, then walks you through each one in conversation. As you find exceptions, a live graph turns from amber to teal. At the end, a balanced insight emerges — "the middle way."
+A visual thinking tool that breaks absolute beliefs apart using Socratic questioning. You type a rigid thought. The AI surfaces the hidden assumptions underneath, then walks you through each one in conversation. As you find exceptions, a live graph shifts from amber to teal. At the end, a balanced perspective shows up. We call it the middle way.
 
-No arguing. No debating. Just questions that help you see your own blind spots.
+No arguing. No debate. Questions that surface your own blind spots.
 
 ## How we built it
 
-Next.js 16 app router frontend, OpenAI GPT-5.6 with Structured Outputs for reliable JSON parsing, React Flow for the interactive node graph, Tailwind CSS v4 for styling. The AI has three phases: Deconstruct (break belief into fact vs. leap), Reflect (Socratic dialogue per assumption), Synthesize (distill into balanced truth). Built in ~72 hours for OpenAI Build Week.
+Next.js 16 App Router on the frontend. OpenAI GPT-5.6 with Structured Outputs for reliable JSON at every step. React Flow for the node graph. Tailwind v4 for styling.
+
+The AI runs in three phases. Deconstruct splits a belief into fact versus leap. Reflect runs Socratic dialogue on each assumption. Synthesize distills the resolved concessions into one balanced line. Built in roughly 72 hours for OpenAI Build Week.
 
 ## Challenges we ran into
 
-Getting the AI to *question without arguing* was the hardest part — default LLM behavior is to debate and explain, not to ask. We rewrote system prompts 8+ times to kill every trace of lecture tone. Structured Outputs were brittle at first (GPT kept adding extra fields or returning markdown). Progressive node reveal in React Flow required careful state management to avoid visual jumps.
+Hardest part: getting the model to *question* instead of *argue*. Default LLM behavior is to explain, correct, debate. We rewrote the system prompts more than eight times to strip every trace of lecture tone out.
+
+Structured Outputs were brittle early on. GPT kept adding extra fields or wrapping JSON in markdown fences. We wrote a defensive parser that isolates the first valid JSON block regardless of envelope.
+
+Progressive node reveal in React Flow needed careful state handling to avoid the graph jumping when new nodes appeared.
 
 ## Accomplishments we're proud of
 
-The fact vs. leap card design — visually splitting a belief into "what's true" and "where you jumped too far" makes cognitive distortions tangible. The middle way emergence animation (blur-to-clear with ivory glow) genuinely feels like a moment of clarity. We killed every gamification idea (scores, streaks, progress bars) — the tool stays quiet and respectful, like a real philosophical conversation.
+The fact-versus-leap card. Visually splitting a belief into "what's actually true" and "where you jumped too far" makes a cognitive distortion something you can point at. People get it in two seconds.
+
+The middle way emergence animation (blur-to-clear with an ivory glow) genuinely reads as a small moment of clarity. We are happy with that one.
+
+We also killed every gamification idea we had. Scores, streaks, progress bars, all of it. The tool stays quiet. It feels like a conversation, not a quiz.
 
 ## What we learned
 
-Structured Outputs + JSON schema is the only reliable way to get AI to follow a format at scale. The Socratic Method maps surprisingly well to a state machine with exactly 3 phases. Less UI is more — the original spec had 5+ node types, we cut to 3 (root, assumption, middle way). Design-wise: warm-ink dark mode with ochre/sage accents avoids the generic AI purple-cyan look entirely.
+Structured Outputs plus a JSON schema is the only reliable way to get an LLM to hold a format under pressure. The Socratic Method maps cleanly onto a three-phase state machine, which surprised us. Less UI is more: the original spec had five-plus node types, we shipped three (root, assumption, middle way).
 
-## What's next for socratic method AI
+On design: warm-ink dark mode with ochre and sage accents dodges the generic AI purple-cyan look entirely. That felt worth the extra day.
 
-Session history so you can track how your thinking shifts over time. Voice input for journaling on the go. A "lighter" mode for everyday worries vs. deep worldview deconstruction. Mobile-responsive layout. And eventually, custom belief profiles — the AI learns which leaps you tend to make and gets sharper at spotting them.
+## What's next
+
+Session history, so you can track how your thinking shifts over weeks. Voice input for journaling on the go. A lighter mode for everyday worries (not just deep worldview deconstruction). Mobile layout. And eventually, custom belief profiles: the AI learns which leaps you tend to make and gets sharper at spotting them.
